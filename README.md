@@ -7,14 +7,14 @@
 
 ## 2. Objektinio programavimo principai
 
-| OOP principas     | Įgyvendinimas                                                                   |
-|-------------------|---------------------------------------------------------------------------------|
-| **Abstrakcija**   | `Asmuo` – abstrakti klasė su metodu `gauti_informacija()`                       |
-| **Paveldėjimas**  | `Draugas` ir `SeimosNarys` paveldi `Asmuo`                                      |
-| **Polimorfizmas** | Abi paveldėtos klasės turi savitą `gauti_informacija()` implementaciją          |
-| **Kompozicija**   | `Vartotojas` turi `GimtadieniuValdiklis` objektą                                |
-| **Inkapsuliacija**| Kiekviena klasė slepia duomenis ir metodus susijusius su jos atsakomybėmis      |
-| **Singleton**     | `GimtadieniuPrograma` – tik vienas egzempliorius per paleidimą                  |
+| OOP principas     | Įgyvendinimas                                                                                                                              |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| **Abstrakcija**   | `zmogus` – abstrakti klasė                                                                                                                 |
+| **Paveldėjimas**  | `draugas` ir `seima` paveldi `zmogus`                                                                                                      |
+| **Polimorfizmas** | Abi paveldėtos klasės, įgyvendina `info()` metodą                                                                                          |
+| **Kompozicija**   | `naudotojas` saugo naudotojo vardą ir su juo susietus gimtadienius                                                                         |
+| **Inkapsuliacija**| `zmones`, `naudotojai`, `_instance` slepia duomenis ir metodus susijusius su jos atsakomybėmis                                             |
+| **Singleton**     | Saugo vieną `birthday_reminder` objektą, užtikrina, kad būtų tik vienas egzempliorius per paleidimą                                        |
 
 ## 3. Duomenų saugojimas
 
