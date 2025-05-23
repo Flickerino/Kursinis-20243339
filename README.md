@@ -1,18 +1,20 @@
 # Kursinis-20243339
 
+# Birthday Reminder - Ataskaita
+
 ## 1. Tema
-**Gimtadienių priminimo sistema** – programa, leidžianti vartotojams registruotis, įrašyti draugų ir šeimos narių gimtadienius, peržiūrėti juos bei gauti priminimus, jei šiandien kažkieno gimtadienis.
+**Birthday reminder** – programa, leidžianti vartotojams registruotis, įrašyti draugų ir šeimos narių gimtadienius, peržiūrėti juos bei gauti priminimus, jei šiandien kažkieno gimtadienis.
 
 ## 2. Objektinio programavimo principai
 
-| OOP principas    | Įgyvendinimas                                                                   |
-|------------------|----------------------------------------------------------------------------------|
-| **Abstrakcija**  | `Asmuo` – abstrakti klasė su metodu `gauti_informacija()`                       |
-| **Paveldėjimas** | `Draugas` ir `SeimosNarys` paveldi `Asmuo`                                      |
-| **Polimorfizmas**| Abi paveldėtos klasės turi savitą `gauti_informacija()` implementaciją          |
-| **Kompozicija**  | `Vartotojas` turi `GimtadieniuValdiklis` objektą                                |
-| **Encapsulation**| Kiekviena klasė slepia duomenis ir metodus susijusius su jos atsakomybėmis      |
-| **Singleton**    | `GimtadieniuPrograma` – tik vienas egzempliorius per paleidimą                  |
+| OOP principas     | Įgyvendinimas                                                                   |
+|-------------------|---------------------------------------------------------------------------------|
+| **Abstrakcija**   | `Asmuo` – abstrakti klasė su metodu `gauti_informacija()`                       |
+| **Paveldėjimas**  | `Draugas` ir `SeimosNarys` paveldi `Asmuo`                                      |
+| **Polimorfizmas** | Abi paveldėtos klasės turi savitą `gauti_informacija()` implementaciją          |
+| **Kompozicija**   | `Vartotojas` turi `GimtadieniuValdiklis` objektą                                |
+| **Inkapsuliacija**| Kiekviena klasė slepia duomenis ir metodus susijusius su jos atsakomybėmis      |
+| **Singleton**     | `GimtadieniuPrograma` – tik vienas egzempliorius per paleidimą                  |
 
 ## 3. Duomenų saugojimas
 
@@ -26,9 +28,69 @@
 - Gimtadienių šalinimas ir peržiūra
 - Priminimas, jei šiandien gimtadienis
 
-## 5. Naudojimas
+* **1.1 Kas per programa?**
 
-### Pavyzdys:
+    Birthday Reminder yra Python programa, skirta padėti vartotojams sekti svarbius gimtadienius. Ji leidžia vartotojams kurti paskyras, pridėti, šalinti ir peržiūrėti gimtadienio įrašus bei gauti priminimus. Programa išsaugo gimtadienio duomenis .CSV failuose, kad jie būtų išlaikyti tarp sesijų.
+    
+* **1.2 Kaip paleisti programą?**
+
+    Norint paleisti programą:
+    
+    1.  Reikia išsaugoti programos `.py` failą.
+    2.  Atidaryti programą, esančią `.py` faile.
+    3.  Paspausti `Run Code` mygtuką.
+    
+* **1.3 Kaip naudoti programą?**
+
+    Kai programa prasideda, pateikiamas meniu:
+    
+    1.  **Prisijungti prie paskyros:** Įvesti savo paskyros vardą, kad prisijungti. Jei paskyra egzistuoja, vartotojas nukreipiamas į sesijos meniu.
+    2.  **Registruoti naują paskyrą:** Įvesti naują paskyros vardą, kad sukurti naują paskyrą.
+    3.  **Išeiti:** Uždaro programą.
+    
+    Prisijungus, sesijos meniu leidžia:
+    
+    1.  **Pridėti gimtadienį:** Pridėti naują gimtadienį, įvedant vardą, datą (YYYY-MM-DD) ir tipą (draugas/seima).
+    2.  **Pašalinti gimtadienį:** Pašalinti gimtadienį, įvedant vardą.
+    3.  **Peržiūrėti gimtadienius:** Rodo visus išsaugotus gimtadienius dabartiniam vartotojui.
+    4.  **Atsijungti:** Grįžta į pagrindinį meniu.
+
+**2. Analizė**
+
+* **2.1 Kaip programa įgyvendina funkcinius reikalavimus**
+    * **Pridėti/pašalinti gimtadienius:** `gimtadieniai` klasės metodai `prideti_gimtadieni` ir `pasalinti_gimtadieni` įgyvendina šį funkcionalumą.
+    * **Spausdinti gimtadienio priminimus:** `gimtadieniai` klasės metodas `priminti_snd` patikrina, ar yra gimtadienių einamąją dieną, ir atspausdina priminimą.
+    * **Išsaugoti gimtadienius į failą:** `gimtadieniai` klasė naudoja .CSV failus gimtadienio duomenims saugoti, o `issaugoti_gimtadienius` ir `irasyti_gimtadieniai` metodai tvarko išsaugojimą ir įkėlimą.
+    * **Palaikyti kelis vartotojus:** `paskyra` klasė valdo vartotojų paskyras, leidžiant keliems vartotojams registruotis ir saugoti savo gimtadienių sąrašus.
+
+    * **Kodo ištraukos:**
+    
+        * Pridėjimas gimtadienio:
+    
+            ```python
+            def prideti_gimtadieni(self, vardas, data, tipas):
+                if tipas == "draugas":
+                    asmuo = draugas(vardas, data)
+                elif tipas == "seima":
+                    asmuo = seima(vardas, data)
+                else:
+                    print("Tipas turi būti 'draugas' arba 'seima'")
+                    return
+                self.zmones.append(asmuo)
+                self.issaugoti_gimtadienius()
+                print(f"{vardas} gimtadienis pridėtas.")
+            ```
+            
+        * Išsaugojimas į CSV:
+    
+            ```python
+            def issaugoti_gimtadienius(self):
+                with open(self.failas, mode="w", newline="") as file:
+                    writer = csv.writer(file)
+                    for asmuo in self.zmones:
+                        tipas = "draugas" if isinstance(asmuo, draugas) else "seima"
+                        writer.writerow([asmuo.vardas, asmuo.gimtadienis.strftime("%Y-%m-%d"), tipas])
+### Meniu pavyzdys:
 
 ```text
 --- Gimtadienių Priminimas ---
@@ -45,211 +107,25 @@ Gimtadienio data (YYYY-MM-DD): 1990-05-01
 Tipas (draugas/seima): draugas
 ```
 
-## 6. Išvados
+**3. Rezultatai ir Apibendrinimas**
 
-Šio darbo metu pavyko sėkmingai sukurti funkcinę gimtadienių priminimo sistemą, pritaikant pagrindinius objektinio programavimo principus bei dizaino šablonus. Vienas iš iššūkių buvo tinkamai panaudoti abstrakčią klasę ir užtikrinti polimorfizmo veikimą tarp skirtingų kontaktų tipų. Taip pat reikėjo užtikrinti duomenų išsaugojimą naudojant .csv formatą ir pasirūpinti vartotojo sąsajos paprastumu.
+* **3.1 Rezultatai**
 
----
+    * Programa sėkmingai leidžia vartotojams registruotis, prisijungti ir valdyti savo gimtadienių sąrašus, įskaitant pridėjimą, pašalinimą ir peržiūrą.
+    * Gimtadienio duomenys yra išsaugomi .CSV formatu, užtikrinant duomenų išlikimą tarp programos paleidimų, o prisijungus vartotojui, priminimai apie šiandienos gimtadienius yra pateikiami.
+    * Vienas iš iššūkių buvo tinkamai suvaldyti skirtingų klasių (pvz., naudotojas, gimtadieniai, paskyra) tarpusavio ryšius ir užtikrinti sklandų duomenų srautą tarp jų.
+    * Taip pat teko kelis kartus tikslinti metodų pavadinimus ir jų kvietimo būdus, kad atitiktų skirtingas klases ir būtų išvengta atributų klaidų.
 
-Kodas:
-import csv
-import datetime
-import os
-from abc import ABC, abstractmethod
-import unittest
+* **3.2 Išvados**
 
+    Šio darbo metu sėkmingai parašyta Birthday Reminder programa, kuri leidžia vartotojams patogiai valdyti ir sekti svarbias datas. Rezultatas - programa, leidžianti registruotis, prisijungti, pridėti, šalinti ir peržiūrėti gimtadienius, o taip pat gauti priminimus apie šiandienos gimtadienius. Ateities perspektyvos apima pranešimų sistemos tobulinimą, GUI kūrimą bei papildomų funkcijų, tokių kaip gimtadienių redagavimas ir paieška, integravimą.
 
-class birthday_reminder:
-    _instance = None
+* **3.3 Kaip būtų galima išplėsti jūsų aplikaciją?**
 
-    def __new__(cls):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance.paskyros = paskyra()
-        return cls._instance
-
-    def paleisti(self):
-        while True:
-            print("\n--- Birthday Reminder ---")
-            print("1. Prisijungti prie paskyros")
-            print("2. Registruoti naują paskyrą")
-            print("3. Išeiti")
-            pasirinkimas = input("Pasirinkite: ")
-
-            if pasirinkimas == "1":
-                vardas = input("Įveskite paskyros vardą: ")
-                naudotojas = self.paskyros.gauti_paskyra(vardas)
-                if naudotojas:
-                    sesija(naudotojas).paleisti()
-                else:
-                    print("Paskyra nerasta.")
-            elif pasirinkimas == "2":
-                vardas = input("Naujas paskyros vardas: ")
-                self.paskyros.prideti_paskyra(vardas)
-            elif pasirinkimas == "3":
-                print("Programa baigta.")
-                break
-            else:
-                print("Neteisingas pasirinkimas.")
-
-
-class zmogus(ABC):
-    def __init__(self, vardas, gimtadienis):
-        self.vardas = vardas
-        self.gimtadienis = datetime.datetime.strptime(gimtadienis, "%Y-%m-%d").date()
-
-    @abstractmethod
-    def info(self):
-        pass
-
-
-class draugas(zmogus):
-    def info(self):
-        return f"Draugo {self.vardas} gimtadienis: {self.gimtadienis}"
-
-
-class seima(zmogus):
-    def info(self):
-        return f"Šeimos nario {self.vardas} gimtadienis: {self.gimtadienis}"
-
-
-class naudotojas:
-    def __init__(self, vardas):
-        self.vardas = vardas
-        self.gimtadienis = gimtadieniai(vardas)
-
-
-class paskyra:
-    def __init__(self):
-        self.naudotojai = []
-
-    def prideti_paskyra(self, vardas):
-        if not any(naudotojas.vardas == vardas for naudotojas in self.naudotojai):
-            naujas_naudotojas = naudotojas(vardas)
-            self.naudotojai.append(naujas_naudotojas)
-            print(f"Paskyra {vardas} pridėta.")
-        else:
-            print("Tokia paskyra jau egzistuoja.")
-
-    def gauti_paskyra(self, vardas):
-        for naudotojas in self.naudotojai:
-            if naudotojas.vardas == vardas:
-                return naudotojas
-        return None
-
-
-class gimtadieniai:
-    def __init__(self, vardas):
-        self.vardas = vardas
-        self.zmones = []
-        self.failas = f"{vardas}_gimtadieniai.csv"
-        self.irasyti_gimtadieniai()
-
-    def prideti_gimtadieni(self, vardas, data, tipas):
-        if tipas == "draugas":
-            asmuo = draugas(vardas, data)
-        elif tipas == "seima":
-            asmuo = seima(vardas, data)
-        else:
-            print("Tipas turi būti 'draugas' arba 'seima'")
-            return
-        self.zmones.append(asmuo)
-        self.issaugoti_gimtadienius()
-        print(f"{vardas} gimtadienis pridėtas.")
-
-    def pasalinti_gimtadieni(self, vardas):
-        self.zmones = [z for z in self.zmones if z.vardas != vardas]
-        self.issaugoti_gimtadienius()
-        print(f"{vardas} pašalintas.")
-
-    def rodyti_gimtadienius(self):
-        if not self.zmones:
-            print("Nėra gimtadienių.")
-            return
-        for asmuo in self.zmones:
-            print(asmuo.info())
-
-    def priminti_snd(self):
-        siandien = datetime.date.today()
-        for asmuo in self.zmones:
-            if asmuo.gimtadienis.month == siandien.month and asmuo.gimtadienis.day == siandien.day:
-                print(f"🔔 Šiandien yra {asmuo.vardas} gimtadienis!")
-
-    def issaugoti_gimtadienius(self):
-        with open(self.failas, mode="w", newline="") as file:
-            writer = csv.writer(file)
-            for asmuo in self.zmones:
-                tipas = "draugas" if isinstance(asmuo, draugas) else "seima"
-                writer.writerow([asmuo.vardas, asmuo.gimtadienis.strftime("%Y-%m-%d"), tipas])
-
-    def irasyti_gimtadieniai(self):
-        if not os.path.exists(self.failas):
-            return
-        with open(self.failas, mode="r") as file:
-            reader = csv.reader(file)
-            for eilute in reader:
-                if len(eilute) == 3:
-                    vardas, data, tipas = eilute
-                    self.prideti_gimtadieni(vardas, data, tipas)
-
-
-class sesija:
-    def __init__(self, naudotojas):
-        self.naudotojas = naudotojas
-
-    def paleisti(self):
-        print(f"\n🔐 Prisijungėte kaip {self.naudotojas.vardas}")
-        self.naudotojas.gimtadienis.priminti_snd()
-        while True:
-            print("\n1. Pridėti gimtadienį")
-            print("2. Pašalinti gimtadienį")
-            print("3. Peržiūrėti gimtadienius")
-            print("4. Atsijungti")
-            pasirinkimas = input("Pasirinkite: ")
-
-            if pasirinkimas == "1":
-                vardas = input("Vardas: ")
-                data = input("Gimtadienio data (YYYY-MM-DD): ")
-                tipas = input("Tipas (draugas/seima): ")
-                self.naudotojas.gimtadienis.prideti_gimtadieni(vardas, data, tipas)
-            elif pasirinkimas == "2":
-                vardas = input("Įveskite vardą: ")
-                self.naudotojas.gimtadienis.pasalinti_gimtadieni(vardas)
-            elif pasirinkimas == "3":
-                self.naudotojas.gimtadienis.rodyti_gimtadienius()
-            elif pasirinkimas == "4":
-                print("Atsijungta.")
-                break
-            else:
-                print("Neteisingas pasirinkimas.")
-
-
-class testavimas(unittest.TestCase):
-    def setUp(self):
-        self.valdiklis = gimtadieniai("testas")
-        self.valdiklis.failas = "testas_gimtadieniai.csv"
-        self.valdiklis.zmones = []
-
-    def tearDown(self):
-        if os.path.exists("testas_gimtadieniai.csv"):
-            os.remove("testas_gimtadieniai.csv")
-
-    def test_prideti(self):
-        self.valdiklis.prideti_gimtadieni("Jonas", "1990-05-01", "draugas")
-        self.assertEqual(len(self.valdiklis.zmones), 1)
-
-    def test_pasalinti(self):
-        self.valdiklis.prideti_gimtadieni("Jonas", "1990-05-01", "draugas")
-        self.valdiklis.pasalinti_gimtadieni("Jonas")
-        self.assertEqual(len(self.valdiklis.zmones), 0)
-
-    def test_priminimas(self):
-        siandien = datetime.date.today().strftime("%Y-%m-%d")
-        self.valdiklis.prideti_gimtadieni("Tomas", siandien, "šeima")
-        self.valdiklis.priminti_snd()
-
-
-if __name__ == "__main__":
-    unittest.main(exit=False)
-    programa = birthday_reminder()
-    programa.paleisti()
+    Galimi patobulinimai apima:
+    
+    * Pranešimų įgyvendinimą (pvz., naudojant biblioteką el. laiškams ar darbalaukio pranešimams siųsti).
+    * GUI (grafinės vartotojo sąsajos) pridėjimą patogesniam naudojimui.
+    * Paieškos funkcionalumo pridėjimą gimtadieniams rasti.
+    * Klaidų tvarkymo ir įvesties validacijos tobulinimą.
+    * Leidimą vartotojams redaguoti esamus gimtadienius.
